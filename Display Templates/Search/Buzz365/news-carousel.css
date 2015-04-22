@@ -1,0 +1,92 @@
+/** ******************************************************************
+	BXSLIDER OVERRIDES for News Carousel
+****************************************************************** **/
+.news-control-newscarousel-wrapper .bx-wrapper {
+	margin: 0 auto 30px;
+}
+.news-control-newscarousel-wrapper .bx-wrapper .bx-viewport {
+	border: none !important;
+	box-shadow: none !important;
+	left: 0 !important;
+	max-height: 320px;
+}
+.news-control-newscarousel-wrapper .bx-wrapper img {
+	width: 100%;
+}
+.news-control-newscarousel-wrapper .bx-wrapper .bx-pager {
+	top: 0;
+	bottom: inherit;
+	text-align: left !important;
+	margin-top: 10px;
+	padding: 0 10px !important;
+}
+.news-control-newscarousel-wrapper .bx-wrapper .bx-pager.bx-default-pager a {
+	background-color: #C52D83 !important;
+	border-radius: 0 !important;
+	height: 15px !important;
+	width: 15px !important;
+	overflow: hidden;
+}
+.news-control-newscarousel-wrapper .bx-wrapper .bx-pager.bx-default-pager a:hover, 
+.news-control-newscarousel-wrapper .bx-wrapper .bx-pager.bx-default-pager a.active {
+	background-color: #692F79 !important;
+}
+
+/** ******************************************************************
+	NEWS CAROUSEL
+****************************************************************** **/
+.news-control-newscarousel-wrapper {
+}
+
+.news-item-newscarousel {
+	position: relative;
+	max-height: 320px;
+}
+.news-item-newscarousel-caption {
+	background-color: #415A6C;
+	bottom: 0;
+	color: #fff;
+	display: block;
+	line-height: 50px;
+	max-height: 50px;
+	min-height: 50px;
+	opacity: 0.8;
+	padding: 0;
+	position: absolute;
+	width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.news-item-newscarousel-caption span {
+	padding: 15px;
+	white-space: nowrap;
+}
+.news-item-newscarousel-date {
+	background-color: #ea3692;
+	color: #fff;
+	font-size: 1.1em;
+	height: 2.5em;
+	padding: 15px;
+	position: absolute;
+	right: 0;
+	text-align: center;
+	top: 0;
+	width: 2.5em;
+}
+.news-item-newscarousel-date span {
+	display: inline-block;
+}
+
+@media screen and (max-width: 480px) {
+
+	.news-item-newscarousel-caption {
+		line-height: 40px;
+		max-height: 40px;
+		min-height: 40px;
+	}
+
+	.news-item-newscarousel-date {
+		padding: 5px;
+	}
+
+}

@@ -1,0 +1,47 @@
+.pd-viewnavigationtr ul {
+	position: relative;
+	height: 29px;
+	overflow-y: hidden;
+	background-color: rgba(239, 239, 239, 0.8) !important;
+}
+.pd-viewnavigationtr li {
+	height: 30px;
+	overflow-y: hidden;
+}
+.pd-viewnavigationtr a:link,
+.pd-viewnavigationtr a:visited,
+.pd-viewnavigationtr a:hover {
+	padding: 5px 5px 10px !important;
+	font-family: Calibri;
+	font-size: 12pt;
+	color: #333;
+}
+.pd-viewnavigationtr li:hover,
+.pd-viewnavigationtr li:hover + li.sep {
+
+	/*	background-color: rgba(255, 0, 0, 0.58) !important;*/
+}
+.pd-viewnavigationtr li.sep:hover {
+
+	/*	background-color: transparent !important;*/
+}
+.pd-viewnavigationtr li:last-child a {
+	padding-right: 16px !important;
+}
+.pd-viewnavigationtr li.sep {
+	display: inline-block;
+	width: 15px;
+	line-height: 20px;
+}
+.pd-viewnavigationtr li.sep:before {
+	position: absolute;
+	top: 0;
+	padding-left: 3px;
+	font-size: 34px;
+	line-height: 34px;
+	content: "〉";
+	color: silver;
+}
+.pd-viewnavigationtr li.sep img {
+	display: none;
+}

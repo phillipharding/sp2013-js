@@ -1,0 +1,87 @@
+<html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"> 
+<head>
+<title>News Carousel Results</title>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:TemplateHidden msdt:dt="string">0</mso:TemplateHidden>
+<mso:MasterPageDescription msdt:dt="string">Displays the Corporate News Carousel Results control.</mso:MasterPageDescription>
+<mso:ContentTypeId msdt:dt="string">0x0101002039C03B61C64EC4A04F5361F385106601</mso:ContentTypeId>
+<mso:TargetControlType msdt:dt="string">;#SearchResults;#</mso:TargetControlType>
+<mso:HtmlDesignAssociated msdt:dt="string">1</mso:HtmlDesignAssociated>
+<mso:HtmlDesignConversionSucceeded msdt:dt="string">True</mso:HtmlDesignConversionSucceeded>
+<mso:HtmlDesignStatusAndPreview msdt:dt="string">https://platinumdogsconsulting.sharepoint.com/sites/publishing/_catalogs/masterpage/Display%20Templates/Search/Control_NewsCarousel.html, Conversion successful.</mso:HtmlDesignStatusAndPreview>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+    <script>
+        $includeScript(this.url, "~sitecollection/_catalogs/masterpage/Display Templates/Search/Group_NewsCarousel.js");
+    </script>
+
+    <div id="Control_NewsCarousel">
+<!--#_ 
+        RB.Masterpage.LoadResourceFromTenantRoot('_catalogs/masterpage/Buzz365/apps/news-carousel/news-carousel.css')
+            .done(function(a) {
+                if (window.console) window.console.log('**CTL** Loaded: '+a+' **');
+            });
+        RB.Masterpage.LoadBxSlider()
+            .done(function(a,b) {
+            });
+        ctx.ListDataJSONGroupsKey = "ResultTables";
+        ctx.ClientControl.set_groupTemplateId('~sitecollection/_catalogs/masterpage/Display Templates/Search/Group_NewsCarousel.js');
+        AddPostRenderCallback(ctx, function() {
+            $(function() {
+                RB.Masterpage.LoadBxSlider().done(function() {
+                    function defer() {
+                        if (!RB.Masterpage.IsValidType('$.fn.bxSlider')) {
+                            setTimeout(defer, 100);
+                            return;
+                        }
+                        var slider = $('.news-control-newscarousel').bxSlider({
+                                    mode: 'fade', 
+                                    captions: false,
+                                    controls: false,
+                                    auto: true,
+                                    autoStart: true,
+                                    autoHover: false,
+                                    adaptiveHeight: false,
+                                    pause: 8000
+                                });
+                    }
+                    defer();
+                });
+            });
+        });
+_#-->   
+        <div class="news-control-newscarousel-wrapper">
+        <div class="news-control-newscarousel" id="result" name="Control">
+            _#= ctx.RenderGroups(ctx) =#_
+<!--#_
+            if(ctx.ClientControl.get_shouldShowNoResultMessage()) 
+            {
+_#-->
+                <div id="NoResult">
+<!--#_
+                    var emptyMessage = ctx.ClientControl.get_emptyMessage();
+                    if ($isEmptyString(emptyMessage)) 
+                    {
+_#-->
+                        <div class="ms-textLarge ms-srch-result-noResultsTitle">_#= $htmlEncode(Srch.Res.rs_NoResultsTitle) =#_</div>
+<!--#_
+                    } else 
+                    {
+_#-->
+                        _#= $htmlEncode(emptyMessage) =#_
+<!--#_                        
+                    }
+_#-->
+                </div>
+<!--#_
+            }
+_#-->
+        </div>
+        </div>
+    </div>
+</body>
+</html>

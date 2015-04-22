@@ -1,0 +1,64 @@
+<html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"> 
+<head>
+<title>News By Category Results</title>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:TemplateHidden msdt:dt="string">0</mso:TemplateHidden>
+<mso:MasterPageDescription msdt:dt="string">Displays the Corporate News by Category Results control.</mso:MasterPageDescription>
+<mso:ContentTypeId msdt:dt="string">0x0101002039C03B61C64EC4A04F5361F385106601</mso:ContentTypeId>
+<mso:TargetControlType msdt:dt="string">;#SearchResults;#</mso:TargetControlType>
+<mso:HtmlDesignAssociated msdt:dt="string">1</mso:HtmlDesignAssociated>
+<mso:HtmlDesignStatusAndPreview msdt:dt="string">https://platinumdogsconsulting.sharepoint.com/sites/publishing/_catalogs/masterpage/Display%20Templates/Search/Buzz365/Control_NewsByCategory.html, Conversion successful.</mso:HtmlDesignStatusAndPreview>
+<mso:HtmlDesignConversionSucceeded msdt:dt="string">True</mso:HtmlDesignConversionSucceeded>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+    <script>
+        $includeScript(this.url, "~sitecollection/_catalogs/masterpage/Display Templates/Search/Buzz365/Group_NewsCarousel.js");
+        $includeCSS(this.url, "~sitecollection/_catalogs/masterpage/Display Templates/Search/Buzz365/news-bycategory.css");
+    </script>
+
+    <div id="Control_NewsByCategory">
+<!--#_ 
+        ctx.ListDataJSONGroupsKey = "ResultTables";
+        ctx.ClientControl.set_groupTemplateId('~sitecollection/_catalogs/masterpage/Display Templates/Search/Buzz365/Group_NewsCarousel.js');
+        AddPostRenderCallback(ctx, function() {
+            $(function() {
+                $('.news-control-newsbycategory li').fadeIn(500);
+            });
+        });
+_#-->   
+    <div class="news-control-newsbycategory-wrapper">
+        <ul class="news-control-newsbycategory" id="result" name="Control">
+            _#= ctx.RenderGroups(ctx) =#_
+<!--#_
+            if(ctx.ClientControl.get_shouldShowNoResultMessage()) 
+            {
+_#-->
+                <div id="NoResult">
+<!--#_
+                    var emptyMessage = ctx.ClientControl.get_emptyMessage();
+                    if ($isEmptyString(emptyMessage)) 
+                    {
+_#-->
+                        <div class="ms-textLarge ms-srch-result-noResultsTitle">_#= $htmlEncode(Srch.Res.rs_NoResultsTitle) =#_</div>
+<!--#_
+                    } else 
+                    {
+_#-->
+                        _#= $htmlEncode(emptyMessage) =#_
+<!--#_                        
+                    }
+_#-->
+                </div>
+<!--#_
+            }
+_#-->
+        </ul>
+    </div>
+
+    </div>
+</body>
+</html>

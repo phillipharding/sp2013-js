@@ -1,0 +1,83 @@
+<html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"> 
+<head>
+<title>News By Category Item</title>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:TemplateHidden msdt:dt="string">0</mso:TemplateHidden>
+<mso:MasterPageDescription msdt:dt="string">Displays a result tailored for the Corporate News items by Category.</mso:MasterPageDescription>
+<mso:ContentTypeId msdt:dt="string">0x0101002039C03B61C64EC4A04F5361F385106603</mso:ContentTypeId>
+<mso:TargetControlType msdt:dt="string">;#SearchResults;#</mso:TargetControlType>
+<mso:HtmlDesignAssociated msdt:dt="string">1</mso:HtmlDesignAssociated>
+<mso:ManagedPropertyMapping msdt:dt="string">'Title':'Title','AuthorOWSUSER':'AuthorOWSUSER','EditorOWSUSER':'EditorOWSUSER','Path':'Path','LastModifiedTime':'LastModifiedTime','Created':'Created','HitHighlightedSummary':'HitHighlightedSummary','HitHighlightedProperties':'HitHighlightedProperties','ParentLink':'ParentLink','AttachmentDescription':'AttachmentDescription','AttachmentType':'AttachmentType','AttachmentURI':'AttachmentURI','RootPostID':'RootPostID','LikesCount':'LikesCount','NewsPostPublishedDate':'NewsPostPublishedDate','NewsPostCategory':'NewsPostCategory','NewsRollupImageOWSIMGE':'NewsRollupImageOWSIMGE','NewsPageImageOWSIMGE':'NewsPageImageOWSIMGE','BodyOWSMTXT':'BodyOWSMTXT'</mso:ManagedPropertyMapping>
+<mso:HtmlDesignStatusAndPreview msdt:dt="string">https://platinumdogsconsulting.sharepoint.com/sites/publishing/_catalogs/masterpage/Display%20Templates/Search/Buzz365/Item_NewsByCategory.html, Conversion successful.</mso:HtmlDesignStatusAndPreview>
+<mso:HtmlDesignConversionSucceeded msdt:dt="string">True</mso:HtmlDesignConversionSucceeded>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+	<div id="Item_NewsByCategory">
+<!--#_
+		if (!$isNull(ctx.CurrentItem) && !$isNull(ctx.ClientControl))
+		{
+	      var maxBodyLengthInChars = 275;
+	      var maxMetadataValue = Srch.U.maximumSocialMetadataValue;
+
+	      var id = ctx.ClientControl.get_nextUniqueId();
+         var titleLinkId = id + "_titleLink";
+	      var itemId = id + Srch.U.Ids.item;
+	      $setResultItem(itemId, ctx.CurrentItem);
+
+         var path = ctx.CurrentItem.Path;
+	      var newsitemTitle = ctx.CurrentItem.Title;
+	      var newsitemPostCategory = '';
+	      var newsitemTruncatedBody = '';
+	      var newsitemRollupImage = '';
+	      var newsitemPublishedDate = '';
+	      if (!$isNull(ctx.CurrentItem.NewsPostCategory)) {
+				var cats = ctx.CurrentItem.NewsPostCategory.split(';');
+				newsitemPostCategory = cats && cats.length ? cats[0] : 'Unknown Category';
+	      }
+         if(!$isNull(ctx.CurrentItem.BodyOWSMTXT)) {
+             newsitemTruncatedBody = SP.ScriptHelpers.removeHtmlAndTrimStringWithEllipsis(ctx.CurrentItem.BodyOWSMTXT, maxBodyLengthInChars);
+         }
+         if(!$isNull(ctx.CurrentItem.NewsRollupImageOWSIMGE)) {
+				newsitemRollupImage = ctx.CurrentItem.NewsRollupImageOWSIMGE;
+         }
+         if($isEmptyString(newsitemRollupImage) && !$isNull(ctx.CurrentItem.NewsPageImageOWSIMGE)) {
+             newsitemRollupImage = ctx.CurrentItem.NewsPageImageOWSIMGE;
+         }
+         if (!$isNull(ctx.CurrentItem.NewsPostPublishedDate)) {
+				var d = new Date(ctx.CurrentItem.NewsPostPublishedDate);
+				newsitemPublishedDate = String.format("<div class='news-item-newsbycategory-date'><span class='date'>{0}</span><span class='month'>{1}</span></div>",
+												d.getDate(), d.format('MMM'));
+         }
+
+	      var showHoverPanelCallback = null; /*Srch.U.getShowHoverPanelCallbackWide(itemId, hoverId, hoverUrl);*/
+	      var hideHoverPanelCallback = null; /*Srch.U.getHideHoverPanelCallback();*/
+
+         var newsitemAuthor = "";
+         if(!$isNull(ctx.CurrentItem.AuthorOWSUSER)) {
+             newsitemAuthor = ctx.CurrentItem.AuthorOWSUSER;
+         }
+_#-->
+			<li id="_#= $htmlEncode(itemId) =#_" name="Item" data-displaytemplate="NewsByCategoryItem" class="news-item-newsbycategory" style='display:none;' title="_#= $htmlEncode(newsitemTitle) =#_">
+				<span class='news-item-newsbycategory-image'>
+					_#= newsitemRollupImage =#_
+				</span>
+				<div>
+					<span class='news-item-newsbycategory-caption'>
+						<h3>_#= newsitemPostCategory =#_</h3>
+						<p>_#= newsitemTruncatedBody =#_</p>
+					</span>
+					<a id="_#= $htmlEncode(titleLinkId) =#_" href="_#= $urlHtmlEncodeString(path) =#_" class="news-item-newsbycategory-link" title="_#= $htmlEncode(newsitemTitle) =#_">
+						READ FULL ARTICLE&nbsp;<i class="fa fa-arrow-circle-right"></i>
+					</a>
+				</div>
+			</li>
+<!--#_
+		}
+_#-->
+	</div>
+</body>
+</html>
