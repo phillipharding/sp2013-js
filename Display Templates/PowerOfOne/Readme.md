@@ -4,6 +4,7 @@ Reckitt Benckiser O365
 
 ---
 Power of One list navigation breadcrumbs and Security information panel.
+![List Nav and Security Info](https://onedrive.live.com/redir?resid=e4aae1338dac6b00!42169&authkey=!ALm5cc7z-DABQMc&v=3&ithint=photo%2cpng)
 
 ### Version History ###
 Version  | Date | Comments
