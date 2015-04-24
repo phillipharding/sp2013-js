@@ -1,0 +1,89 @@
+/* ***********************************
+ *	LIBRARY/LIST FOLDER BREADCRUMBS
+ * ***********************************/
+.pd-viewnavigationtr ul {
+  position: relative;
+  height: 45px;
+  overflow-y: hidden;
+  background-color: #ededed;
+}
+.pd-viewnavigationtr li {
+  display: inline-block;
+  /* border-right: 1px solid #c5c5c5; */
+  vertical-align: middle;
+  height: 45px;
+}
+.pd-viewnavigationtr a:link, 
+.pd-viewnavigationtr a:visited, 
+.pd-viewnavigationtr a:hover {
+  font-family: Calibri;
+  font-size: 12pt;
+  color: #333;
+  position: relative;
+  padding-left: 48px;
+  text-decoration: none;
+  -moz-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  top: 50%;
+}
+.pd-viewnavigationtr li.first a {
+  padding-left: 15px;
+}
+.pd-viewnavigationtr a::before, 
+.pd-viewnavigationtr a::after {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 51px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 30px solid #ededed;
+  position: absolute;
+  top: 50%;
+  margin-top: -50px;
+  left: 100%;
+  z-index: 2;
+}
+.pd-viewnavigationtr a::before {
+  border-left: 30px solid #c5c5c5;
+  margin-left: 1px;
+  z-index: 1;
+}
+.pd-viewnavigationtr li:hover a::before, 
+.pd-viewnavigationtr li:hover a::after {
+  border-left-color: #f5f5f5;
+}
+.pd-viewnavigationtr li:hover {
+  background-color: #f5f5f5;
+}
+.pd-viewnavigationtr li.last a::before, 
+.pd-viewnavigationtr li.last a::after {
+  border-left-color: #d8d8d8;
+}
+.pd-viewnavigationtr li.last {
+  background-color: #d8d8d8;
+}
+
+/* *************************** 
+ *	SECURITY PANEL 
+ * **************************/
+.pd-securitypanel {}
+.pd-securitypanel h3 { 
+	white-space: nowrap;
+}
+.pd-securitypanel ul {
+	margin:0 0 8px 0;
+}
+.pd-securitypanel li {
+	margin: 0 0 0 20px;
+	padding: 2px 0;
+}
+.pd-securitypanel li.first {
+	padding-top: 5px;
+}
+.pd-securitypanel li.last {
+	padding-bottom: 0;
+}
+
