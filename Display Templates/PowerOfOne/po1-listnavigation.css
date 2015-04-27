@@ -4,7 +4,7 @@
 .pd-viewnavigationtr ul {
   position: relative;
   height: 45px;
-  overflow-y: hidden;
+  overflow: hidden;
   background-color: #ededed;
 }
 .pd-viewnavigationtr li {
@@ -63,13 +63,42 @@
   border-left-color: #d8d8d8;
 }
 .pd-viewnavigationtr li.last {
-  background-color: #d8d8d8;
+	background-color: #d8d8d8;
+	margin-right: 40px;
+}
+.pd-viewnavigationtr li a span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 50px;
+	display: block;
+	padding: 12px 0;
+	transition: all 500ms ease;
+}
+.pd-viewnavigationtr li.last a span {
+	overflow: hidden;
+	text-overflow: inherit;
+	max-width: inherit;
+	display: block;
+	padding: 0 0;
+}
+.pd-viewnavigationtr li a span:hover {
+	max-width: 200px;
+}
+.pd-viewnavigationtr li.last a span:hover {
+	max-width: inherit;
 }
 
 /* *************************** 
  *	SECURITY PANEL 
  * **************************/
-.pd-securitypanel {}
+.pd-securitypanel {
+  padding-left: 15px;
+  border-left: 1px solid #cdcdcd;
+}
+.pd-securitypanel hr { 
+	position: relative;
+	left: -15px;
+}
 .pd-securitypanel h3 { 
 	white-space: nowrap;
 }
@@ -79,11 +108,26 @@
 .pd-securitypanel li {
 	margin: 0 0 0 20px;
 	padding: 2px 0;
+	color: #002596;
 }
 .pd-securitypanel li.first {
 	padding-top: 5px;
 }
 .pd-securitypanel li.last {
 	padding-bottom: 0;
+}
+.pd-securitypanel small {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #E24912;
+}
+.pd-securitypanel h3 a, 
+.pd-securitypanel h3 a:link {
+  font-size: 14px;
+}
+.pd-securitypanel p {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #415A6C;
 }
 

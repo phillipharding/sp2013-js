@@ -104,9 +104,9 @@
 					li = "<li style='display:inline-block;' class='" + ((i === startIndex) ? 'first' : ((i === (folders.length - 1)) ? 'last' : '')) + "'>"
 				a += 'href="' + buildNavigationItemUrl(folderUrl, renderCtx);
 				if (i === first) {
-					a += '">' + ((_webPartCaption && _webPartCaption.length) ? _webPartCaption : folders[i]) + '</a>';
+					a += '"><span>' + ((_webPartCaption && _webPartCaption.length) ? _webPartCaption : folders[i]) + '</span></a>';
 				} else {
-					a += '">' + folders[i] + '</a>';
+					a += '"><span>' + folders[i] + '</span></a>';
 				}
 				li += a;
 				li += '</li>';
@@ -127,30 +127,34 @@
 
 			/* add navigation table header row above table column headers */
 			var wpcaption = document.getElementById("WebPartCaption" + renderCtx.wpq),
-				wpthead = document.getElementById("js-listviewthead-" + renderCtx.wpq),
-				wpfirstth = wpthead ? wpthead.firstChild : null;
+				 wpthead = document.getElementById("js-listviewthead-" + renderCtx.wpq),
+				 wpTable = wpthead ? wpthead.parentNode : null,
+				 wpfirstth = wpthead ? wpthead.firstChild : null;
 			if (!wpthead) return;
 			if (wpthead.getAttribute('pd-viewnavigationtr')) return;
 			wpthead.setAttribute('pd-viewnavigationtr', '1');
+			if (wpTable) {
+				wpTable.style.width = '100%';
+			}
 
 			if (wpcaption) {
 				wpcaption = wpcaption.previousElementSibling || wpcaption.previousSibling;
 				if (wpcaption) _webPartCaption = wpcaption.innerHTML && wpcaption.innerHTML.length ? wpcaption.innerHTML : null;
 			}
 
-			var listViewTd = document.getElementById("script" + renderCtx.wpq);
-			var wpTable = listViewTd.parentNode;
-			var secTd = document.createElement('TD');
-			listViewTd.setAttribute('valign', 'top');
-			listViewTd.setAttribute('align', 'left');
-			secTd.setAttribute('valign', 'top');
-			secTd.setAttribute('align', 'left');
-			secTd.className = 'pd-securitypanel';
+			var listViewContainerTd = document.getElementById("script" + renderCtx.wpq);
+			var listViewContainerTr = listViewContainerTd.parentNode;
+			var secPanelTd = document.createElement('TD');
+			listViewContainerTd.setAttribute('valign', 'top');
+			listViewContainerTd.setAttribute('align', 'left');
+			secPanelTd.setAttribute('valign', 'top');
+			secPanelTd.setAttribute('align', 'left');
+			secPanelTd.className = 'pd-securitypanel';
 			if (isInEditMode())
-				secTd.innerHTML = "<div id='pdsecuritypanel" + renderCtx.wpq + "'><h2 style='color:red;text-transform:uppercase;'>EDIT MODE</h2><hr/></div>";
+				secPanelTd.innerHTML = "<div id='pdsecuritypanel" + renderCtx.wpq + "'><h2 style='color:red;text-transform:uppercase;'>EDIT MODE</h2><hr/></div>";
 			else 
-				secTd.innerHTML = "<div id='pdsecuritypanel" + renderCtx.wpq + "'><h2>SECURITY</h2><hr/></div>";
-			wpTable.appendChild(secTd);
+				secPanelTd.innerHTML = "<div id='pdsecuritypanel" + renderCtx.wpq + "'><h2>SECURITY</h2><hr/></div>";
+			listViewContainerTr.appendChild(secPanelTd);
 
 			if (!isInEditMode())
 			{
@@ -167,21 +171,41 @@
 				else
 					wpthead.appendChild(navTr);
 
-				getCurrentFolderSecurity(renderCtx).then(renderSecurityInfo);
+				getFolderUniqueAncestor(renderCtx, _thisCurrentFolder)
+					.then(getFolderSecurity)
+					.then(renderFolderSecurityInfo);
 			}
 		}
 
-		function resolvePrincipalType(p) {
-			var t = [];
-			if (p === 15)
+		function resolvePrincipalType(m) {
+			var t = [], 
+				prn = {
+					types: '',
+					linkText: ''
+				};
+			if (m.PrincipalType === 15) {
 				t.push('All');
-			else {
-				if (p & 1) t.push('User');
-				if (p & 2) t.push('DistributionList');
-				if (p & 4) t.push('SecurityGroup');
-				if (p & 8) t.push('SharePointGroup');
+				prn.linkText = m.Title;
+			} else {
+				if (m.PrincipalType & 1) {
+					t.push('User');
+					prn.linkText = String.format("<a target='_blank' title='{3}' href='{0}/_layouts/15/userdisp.aspx?ID={1}'>{2}</a>", _spPageContextInfo.siteServerRelativeUrl, m.Id, m.Title, m.Description || m.Title);
+				}
+				if (m.PrincipalType & 2) {
+					t.push('DistributionList');
+					prn.linkText = m.Title;
+				}
+				if (m.PrincipalType & 4) {
+					t.push('SecurityGroup');
+					prn.linkText = m.Title;
+				}
+				if (m.PrincipalType & 8) {
+					t.push('SharePointGroup');
+					prn.linkText = String.format("<a target='_blank' title='{3}' href='{0}/_layouts/15/people.aspx?MembershipGroupId={1}'>{2}</a>", _spPageContextInfo.siteServerRelativeUrl, m.Id, m.Title, m.Description || m.Title);
+				}
 			}
-			return t.length ? t.join(',') : '';
+			prn.types = t.length ? t.join(',') : ''
+			return prn;
 		}
 
 		function resolveRoleTypeKind(rtk) {
@@ -199,12 +223,21 @@
 			return t.length ? t.join(',') : '';
 		}
 
-		function renderSecurityInfo(renderCtx, isInherited, roleAssignmentInfo) {
+		function renderFolderSecurityInfo(renderCtx, ancestorInfo, hasUniqueRoleAssignments, roleAssignmentInfo) {
 			var html = [];
+
+			if (hasUniqueRoleAssignments)
+				html.push("<p class='notice'>The Security Role Assignments below are unique to this folder location.</p>");
+			else {
+				html.push(String.format("<p>The Security Role Assignments for this location are inherited from: <a title='{1}' href='{0}'>{1}</a>.</p>",
+											ancestorInfo.ServerRelativeUrl, ancestorInfo.Title));
+			}
+
 			$.each(roleAssignmentInfo, function(i, o) {
 				var m = o.Member,
-					b = o.RoleDefinitionBindings.results;
-				html.push(String.format('<h3 title="{1}">{0}&nbsp;<small>{2}</small></h3><ul>', m.Title, m.Description || m.Title, resolvePrincipalType(m.PrincipalType)));
+					 b = o.RoleDefinitionBindings.results,
+					 principal = resolvePrincipalType(m);
+				html.push(String.format('<h3 title="{1}">{0}&nbsp;<small>{2}</small></h3><ul>', principal.linkText, m.Description || m.Title, principal.types));
 
 				$.each(b, function(i, o) {
 					var c = (i == (b.length - 1)) ? 'last' : '';
@@ -220,10 +253,10 @@
 			domSecurityPanel.appendChild(c);
 		}
 
-		function getCurrentFolderSecurity(renderCtx) {
+		function getFolderSecurity(renderCtx, currentFolder, ancestorInfo) {
 			var webInherit = '',
 				webRoleAssn = '';
-			if (_thisCurrentFolder.indexOf('/') === -1) {
+			if (currentFolder.indexOf('/') === -1) {
 				/* we're in the library root, so we have to change the REST urls to use the lists api instead */
 				webInherit = _spPageContextInfo.webServerRelativeUrl + "/_api/web/lists/GetByTitle('{0}')/HasUniqueRoleAssignments";
 				webRoleAssn = _spPageContextInfo.webServerRelativeUrl + "/_api/web/lists/GetByTitle('{0}')/RoleAssignments?$Expand=Member,RoleDefinitionBindings";
@@ -236,14 +269,14 @@
 			var p = new $.Deferred();
 			var rRoleAssignments = {
 				type: 'GET',
-				url: String.format(webRoleAssn, _thisCurrentFolder),
+				url: String.format(webRoleAssn, currentFolder),
 				headers: {
 					ACCEPT: 'application/json;odata=verbose'
 				}
 			};
 			var rInherits = {
 				type: 'GET',
-				url: String.format(webInherit, _thisCurrentFolder),
+				url: String.format(webInherit, currentFolder),
 				headers: {
 					ACCEPT: 'application/json;odata=verbose'
 				}
@@ -255,9 +288,57 @@
 			var domSecurityPanel = document.getElementById('pdsecuritypanel' + renderCtx.wpq);
 			$.when.apply($, fns)
 				.done(function(respInherits, respRoleAssns) {
-					var dataInherits = respInherits[0].d.HasUniqueRoleAssignments;
-					var dataRoleAssns = respRoleAssns[0].d.results;
-					p.resolve(renderCtx, dataInherits, dataRoleAssns);
+					var hasUniqueRoleAssignments = respInherits[0].d.HasUniqueRoleAssignments;
+					var roleAssignments = respRoleAssns[0].d.results;
+					p.resolve(renderCtx, ancestorInfo, hasUniqueRoleAssignments, roleAssignments);
+				})
+				.fail(function(xhrObj, textStatus, err) {
+					var e = JSON.parse(xhrObj.responseText),
+						err = e.error || e["odata.error"],
+						m = '<div style="color:red;font-family:Calibri;font-size:1.2em;">Exception<br/>&raquo; ' + ((err && err.message && err.message.value) ? err.message.value : (xhrObj.status + ' ' + xhrObj.statusText)) + '</div>',
+						m1 = 'Error>> ' + ((err && err.message && err.message.value) ? err.message.value : (xhrObj.status + ' ' + xhrObj.statusText));
+					var c = document.createElement('DIV');
+					c.innerHTML = m;
+					domSecurityPanel.appendChild(c);
+					p.reject(m1);
+				});
+			return p.promise();
+		}
+
+		function getFolderUniqueAncestor(renderCtx, currentFolder) {
+			var p = new $.Deferred();
+			var fuaso = '';
+			if (currentFolder.indexOf('/') === -1) {
+				/* we're in the library root, so we have to change the REST urls to use the lists api instead */
+				fuaso = _spPageContextInfo.webServerRelativeUrl + "/_api/web/lists/GetByTitle('{0}')/FirstUniqueAncestorSecurableObject?$Select=ServerRelativeUrl,Name,Title";
+			} else {
+				/* we're not in the library root, so we have to use the folders REST api */
+				fuaso = _spPageContextInfo.webServerRelativeUrl + "/_api/web/GetFolderByServerRelativeUrl('{0}')/ListItemAllFields/FirstUniqueAncestorSecurableObject?$Select=ServerRelativeUrl,Name,Title";
+			}
+
+			var request = {
+				type: 'GET',
+				url: String.format(fuaso, currentFolder),
+				headers: { ACCEPT: 'application/json;odata=verbose' }
+			};
+			var domSecurityPanel = document.getElementById('pdsecuritypanel' + renderCtx.wpq);
+			$.ajax(request)
+				.done(function(response) {
+					var rtype = response.d.__metadata.type;
+					if (rtype === 'SP.Web')
+						p.resolve(renderCtx, currentFolder, { ServerRelativeUrl: response.d.ServerRelativeUrl, Title: response.d.Title });
+					else if (rtype === 'SP.List' || rtype.match(/^SP.Data.[\w]+Item/gi)) {
+						request.url = (rtype === 'SP.List')
+											? request.url.replace('FirstUniqueAncestorSecurableObject', 'FirstUniqueAncestorSecurableObject/RootFolder')
+											: request.url.replace('FirstUniqueAncestorSecurableObject', 'FirstUniqueAncestorSecurableObject/Folder');
+						$.ajax(request)
+							.done(function(response) {
+								p.resolve(renderCtx, currentFolder, { ServerRelativeUrl: response.d.ServerRelativeUrl, Title: response.d.Name });
+							})
+							.fail(function(xhrObj, textStatus, err) {
+								debugger;
+							});
+					}
 				})
 				.fail(function(xhrObj, textStatus, err) {
 					var e = JSON.parse(xhrObj.responseText),
