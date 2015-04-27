@@ -227,9 +227,9 @@
 			var html = [];
 
 			if (hasUniqueRoleAssignments)
-				html.push("<p class='notice'>The Security Role Assignments below are unique to this folder location.</p>");
+				html.push("<p class='notice'>The security role assignments below are unique to this folder location.</p>");
 			else {
-				html.push(String.format("<p>The Security Role Assignments for this location are inherited from: <a title='{1}' href='{0}'>{1}</a>.</p>",
+				html.push(String.format("<p>The security role assignments for this location are inherited from: <a title='{1}' href='{0}'>{1}</a>.</p>",
 											ancestorInfo.ServerRelativeUrl, ancestorInfo.Title));
 			}
 
@@ -308,6 +308,18 @@
 		function getFolderUniqueAncestor(renderCtx, currentFolder) {
 			var p = new $.Deferred();
 			var fuaso = '';
+
+			function ajaxFail(xhrObj, textStatus, err) {
+				var e = JSON.parse(xhrObj.responseText),
+					err = e.error || e["odata.error"],
+					m = '<div style="color:red;font-family:Calibri;font-size:1.2em;">Exception<br/>&raquo; ' + ((err && err.message && err.message.value) ? err.message.value : (xhrObj.status + ' ' + xhrObj.statusText)) + '</div>',
+					m1 = 'Error>> ' + ((err && err.message && err.message.value) ? err.message.value : (xhrObj.status + ' ' + xhrObj.statusText));
+				var c = document.createElement('DIV');
+				c.innerHTML = m;
+				domSecurityPanel.appendChild(c);
+				p.reject(m1);
+			}
+
 			if (currentFolder.indexOf('/') === -1) {
 				/* we're in the library root, so we have to change the REST urls to use the lists api instead */
 				fuaso = _spPageContextInfo.webServerRelativeUrl + "/_api/web/lists/GetByTitle('{0}')/FirstUniqueAncestorSecurableObject?$Select=ServerRelativeUrl,Name,Title";
@@ -335,21 +347,10 @@
 							.done(function(response) {
 								p.resolve(renderCtx, currentFolder, { ServerRelativeUrl: response.d.ServerRelativeUrl, Title: response.d.Name });
 							})
-							.fail(function(xhrObj, textStatus, err) {
-								debugger;
-							});
+							.fail(ajaxFail);
 					}
 				})
-				.fail(function(xhrObj, textStatus, err) {
-					var e = JSON.parse(xhrObj.responseText),
-						err = e.error || e["odata.error"],
-						m = '<div style="color:red;font-family:Calibri;font-size:1.2em;">Exception<br/>&raquo; ' + ((err && err.message && err.message.value) ? err.message.value : (xhrObj.status + ' ' + xhrObj.statusText)) + '</div>',
-						m1 = 'Error>> ' + ((err && err.message && err.message.value) ? err.message.value : (xhrObj.status + ' ' + xhrObj.statusText));
-					var c = document.createElement('DIV');
-					c.innerHTML = m;
-					domSecurityPanel.appendChild(c);
-					p.reject(m1);
-				});
+				.fail(ajaxFail);
 			return p.promise();
 		}
 

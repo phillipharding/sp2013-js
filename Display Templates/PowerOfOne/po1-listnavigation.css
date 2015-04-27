@@ -2,10 +2,11 @@
  *	LIBRARY/LIST FOLDER BREADCRUMBS
  * ***********************************/
 .pd-viewnavigationtr ul {
-  position: relative;
-  height: 45px;
-  overflow: hidden;
-  background-color: #ededed;
+	position: relative;
+	height: 45px;
+	overflow: hidden;
+	background-color: #ededed;
+	padding: 0;
 }
 .pd-viewnavigationtr li {
   display: inline-block;
@@ -94,6 +95,9 @@
 .pd-securitypanel {
   padding-left: 15px;
   border-left: 1px solid #cdcdcd;
+}
+.pd-securitypanel > div {
+	max-width: 300px;
 }
 .pd-securitypanel hr { 
 	position: relative;
