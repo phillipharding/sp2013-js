@@ -73,7 +73,9 @@
 	max-width: 50px;
 	display: block;
 	padding: 12px 0;
-	transition: all 500ms ease;
+  -moz-transition: all 500ms ease;
+  -webkit-transition: all 500ms ease;
+  transition: all 500ms ease;
 }
 .pd-viewnavigationtr li.last a span {
 	overflow: hidden;
@@ -89,35 +91,71 @@
 	max-width: inherit;
 }
 
-/* *************************** 
- *	SECURITY PANEL 
- * **************************/
+/* ***************************** 
+ *	SECURITY INFORMATION PANEL 
+ * ****************************/
 .pd-securitypanel {
   padding-left: 15px;
   border-left: 1px solid #cdcdcd;
 }
-.pd-securitypanel > div {
-	max-width: 300px;
+.pd-securitypanel-inner {
+  max-width: 22px;
+  position: relative;
+  -moz-transition: all 200ms linear;
+  -webkit-transition: all 200ms linear;
+  transition: all 200ms linear;
+}
+.pd-securitypanel-inner > div { display: none; }
+.pd-securitypanel-inner > h2 {
+  position: relative;
+  visibility: hidden;
+  margin-left: 28px;
+}
+.pd-securitypanel-inner.open {
+  max-width: 300px;
+  -moz-transition: all 200ms linear;
+  -webkit-transition: all 200ms linear;
+  transition: all 200ms linear;
+}
+.pd-securitypanel-inner.open > div { display: block; }
+.pd-securitypanel-inner.open > h2 { 
+  visibility: visible;
+  position: inherit; 
 }
 .pd-securitypanel hr { 
 	position: relative;
-	left: -15px;
+  left: -15px;
+  margin-right: -19px;
 }
 .pd-securitypanel h3 { 
 	white-space: nowrap;
 }
 .pd-securitypanel ul {
 	margin:0 0 8px 0;
+  padding: 0;
 }
 .pd-securitypanel li {
+  list-style-type: none;
+}
+.pd-securitypanel .pe li {
+  margin: 2px 5px 2px 0;
+  padding: 3px 6px;
+  color: #002596;
+  font-size: 8px;
+  text-transform: uppercase;
+  display: inline-block;
+  border: 1px solid #cdcdcd;
+  background-color: #FFCB00;
+}
+.pd-securitypanel .ra li {
 	margin: 0 0 0 20px;
 	padding: 2px 0;
 	color: #002596;
 }
-.pd-securitypanel li.first {
+.pd-securitypanel .ra li.first {
 	padding-top: 5px;
 }
-.pd-securitypanel li.last {
+.pd-securitypanel .ra li.last {
 	padding-bottom: 0;
 }
 .pd-securitypanel small {
@@ -134,4 +172,20 @@
   font-size: 16px;
   color: #415A6C;
 }
-
+.pd-securitypanel a.appTile {
+  position: absolute;
+  left: -14px;
+  top: 0px;
+  font-size: 18pt;
+  text-decoration: none;
+  padding: 0 5px 0 5px;
+  width: 30px;
+  height: 30px;
+  display: block;
+  z-index: 1;
+}
+.pd-securitypanel a.appTile:hover {
+  opacity: .5;
+  cursor: pointer;
+  background-color: #cdcdcd;
+}

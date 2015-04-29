@@ -1,4 +1,4 @@
-Reckitt Benckiser O365
+List and Library Breadcrumbs / Security Information
 =======================================
 ### Summary ###
 
@@ -16,11 +16,16 @@ The role assignment information includes clickable links to role asssignment mem
 This can be done by modifying 'Reader' type groups or by creating a new permission level.
 ![](http://i.imgur.com/tRJqJij.png)
 
+The code will gracefully degrade if a user does not have **Enumerate Permissions** and instead show the current set of effective permissions;
+![Todo image here when imagur comes back up](http://i.imgur.com/Sxs6T34.png)
+
+
 ### Version History ###
 Version  | Date | Comments
 ---------| -----| --------
 0.1  | April 24th 2015 | Initial release.
 0.2  | April 27th 2015 | Added clickable links and ancestor infomation.
+0.3  | April 29th 2015 | Graceful degrade if user does not have **Enumerate Permissions** permission.
 
 ### Applies to ###
 -  Office 365 Multi Tenant (MT)
